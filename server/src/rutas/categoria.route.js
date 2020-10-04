@@ -1,5 +1,6 @@
+const { request } = require('express');
 var express = require('express');
-var usuarioService = require('../servicio/categoria.service');
+var categoriaService = require('../servicio/categoria.service');
 var router = express.Router();
 
 router.use(function timeLog(req, res, next) {
@@ -7,47 +8,101 @@ router.use(function timeLog(req, res, next) {
   next();
 });
 
-router.get('/todos', function(req, res) {
-  var r = usuarioService.todos();
-  console.log(r);
-  var arrUsuarios = [
-        {
-            id:1,
-            name:'jhon'
+router.get('/todos', async function (req, res) {
+  await categoriaService.todos().then(
+    resp => {
+      if (resp.success) {
+        respuesta = resp.data;
+      } else {
+        respuesta = [];
+      }
+      res.send(respuesta);
+    }
+  );
+});
+
+router.get('/porid/:id', async function (req, res) {
+  var id = req.params.id;
+  await categoriaService.obtenterPorId(id).then(
+    resp => {
+      if (resp.success) {
+        respuesta = resp.data;
+      } else {
+        respuesta = "";
+      }
+      res.send(respuesta);
+    }
+  );
+});
+
+router.post('/crear', async function (req, res) {
+  var categoria = req.body.categoria;
+  await categoriaService.crearCategoria(categoria).then(
+    exito => {
+      if (exito) {
+        respuesta = {
+          msg: 'La categoria fue creado con exito',
+          success: true
         }
-      ] ;
-  res.send(r); //send('About birds');
-
+      } else {
+        respuesta = {
+          msg: 'ocurrio un error al crear la categoria',
+          success: false
+        }
+      }
+      res.send(respuesta);
+    }
+  );
 });
 
-router.post('/Crear', function(req, res){
-  var creanuevouser = usuarioService.crearCategoria();
-  res.send(creanuevouser);
+
+
+
+router.delete('/eliminar/:id', async function (req, res) {
+  var id = req.params.id;
+  await categoriaService.eliminarPorid(id).then(
+    exito => {
+      if (exito) {
+        respuesta = {
+          msg: 'la categoria fue elimano con exito',
+          success: true
+        }
+      } else {
+        respuesta = {
+          msg: 'ocurrio un error al eliminar la categoria',
+          success: false
+        }
+      }
+      res.send(respuesta);
+    }
+  );
 });
 
 
-router.get('/:id', function(req, res) {
-    var id = req.params.id;
-    var usuario = usuarioService.obtenterPorId(id);
-    res.send(usuario);
-  });
 
-  router.delete('/eliminar/:id',function(req, res){
-    var id = req.params.id;
-    var mensaje = usuarioService.eliminarPorid(id);
-    res.send(mensaje);
-  });
-
- 
-
-  router.put('/actualizar/:id',function(req, res){
-    var id = req.params.id;
-    var actualizar = usuarioService.actualizarPorId(id);
-    res.send(actualizar);
-  });
-
+router.put('/actualizar', async function (req, res) {
+  var categoria = req.body.categoria;
+  await categoriaService.actualizar(categoria).then(
+    exito => {
+      if (exito) {
+        respuesta = {
+          msg: 'la categoria fue actualizado con exito',
+          success: true
+        }
+      } else {
+        respuesta = {
+          msg: 'ocurrio un error al actualizar la categoria',
+          success: false
+        }
+      }
+      res.send(respuesta);
+    }
+  );
   
+});
 
- 
+
+
+
 
 module.exports = router;

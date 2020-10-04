@@ -80,10 +80,25 @@ router.delete('/eliminar/:id', async function (req, res) {
 
 
 
-router.put('/actualizar/:id', function (req, res) {
-  var id = req.params.id;
-  var actualizar = usuarioService.actualizarPorId(id);
-  res.send(actualizar);
+router.put('/actualizar', async function (req, res) {
+  var usuario = req.body.usuario;
+  await usuarioService.actualizar(usuario).then(
+    exito => {
+      if (exito) {
+        respuesta = {
+          msg: 'El usuario fue actualizado con exito',
+          success: true
+        }
+      } else {
+        respuesta = {
+          msg: 'ocurrio un error al actualizar el usuario',
+          success: false
+        }
+      }
+      res.send(respuesta);
+    }
+  );
+  
 });
 
 

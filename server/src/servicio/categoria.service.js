@@ -1,54 +1,88 @@
-let  obtenerTodos = function(){
-    console.log('obtenerTodos');
-   var arrCategoria = [
-       {
-           id:1,
-           name:'jhon'
-       },
-       {
-           id:1,
-           name:'jhon'
-       }
-   ];
-   return arrCategoria;
+let obtenerTodos = function () {
+    return new Promise(function(resolve, reject){
+        const queries = require('../database/queries.categoria.database');
+        const conexion = require('../database/conection.database');
+        var sql_todos = queries.todos();
+        conexion.db.all(sql_todos,[], (err, rows) => {
+            if (err) {
+                console.log(err.message);
+                resolve({success:false, data:[]});
+            } else {
+                resolve({success:true, data:rows});
+            }
+        });
+    });
 }
 
-let crearCategoria = function(){
-   var guardarUsarioNuevo = [{
-       id:id,
-       name:'jhon'
-   }];
-   return guardarUsarioNuevo;
+let crearCategoria = function (categoria) {
+    return new Promise(function(resolve, reject){
+        const queries = require('../database/queries.categoria.database');
+        const conexion = require('../database/conection.database');
+        var sql_insert = queries.crearCategoria(categoria);
+        conexion.db.run(sql_insert, err => {
+            if (err) {
+                console.log(err.message);
+                resolve(false);
+            } else {
+                console.log('creado con exito');
+                resolve(true);
+            }
+        });
+    });
+};
+
+let obtenterId = function (id) {
+    return new Promise(function(resolve, reject){
+        const queries = require('../database/queries.categoria.database');
+        const conexion = require('../database/conection.database');
+        var sql_porId = queries.obtenterPorId(id);
+        conexion.db.get(sql_porId, (err, row) => {
+            if (err) {
+                console.log(err.message);
+                resolve({success:false, data:""});
+            } else {
+                console.log('El catalogo fue consulatado');
+                resolve({success:true, data:row});
+            }
+        });
+    });
 }
 
-let obtenterPorId = function (id){
-   var usuario = {
-       id:id,
-       name:'jhon'
-   };
-   return usuario;
+let eliminarid = function (id) {
+    return new Promise(function(resolve, reject){
+        const queries = require('../database/queries.categoria.database');
+        const conexion = require('../database/conection.database');
+        var sql_eliminarPorId = queries.eliminarPorId(id);
+        conexion.db.run(sql_eliminarPorId, err => {
+            if (err) {
+                resolve(false);
+            } else {
+                resolve(true);
+            }
+        });
+    });
 }
 
-let eliminarPorid = function (id){
-   return 'se elimino el ususario con id' + id;
+let actualizar = function (categoria) {
+    return new Promise(function(resolve, reject){
+        const queries = require('../database/queries.categoria.database');
+        const conexion = require('../database/conection.database');
+        var sql_actualizar = queries.actualizarCategoria(categoria);
+        conexion.db.run(sql_actualizar, err => {
+            if (err) {
+                console.log(err.message);
+                resolve(false);
+            } else {
+                console.log('creado con exito');
+                resolve(true);
+            }
+        });
+    });
+    
 }
-
-let actualizarPorId = function (id){
-   var usuarioup={
-       id:id,
-       name:'edwar'
-   };
-   return usuarioup;
-   }
-
-
-
-
-
 
 exports.todos = obtenerTodos;
-exports.obtenterPorId = obtenterPorId;
-exports.eliminarPorid = eliminarPorid;
-exports.actualizarPorId = actualizarPorId;
-exports.crearUsario = crearCategoria;
-
+exports.obtenterPorId = obtenterId;
+exports.eliminarPorid = eliminarid;
+exports.actualizar = actualizar;
+exports.crearCategoria = crearCategoria;

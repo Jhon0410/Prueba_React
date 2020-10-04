@@ -63,16 +63,26 @@ let eliminarPorid = function (id) {
     });
 }
 
-let actualizarPorId = function (id) {
-    var usuarioup = {
-        id: id,
-        name: 'edwar'
-    };
-    return usuarioup;
+let actualizar = function (usuario) {
+    return new Promise(function(resolve, reject){
+        const queries = require('../database/queries.usuario.database');
+        const conexion = require('../database/conection.database');
+        var sql_actualizar = queries.actualizarUsuario(usuario);
+        conexion.db.run(sql_actualizar, err => {
+            if (err) {
+                console.log(err.message);
+                resolve(false);
+            } else {
+                console.log('creado con exito');
+                resolve(true);
+            }
+        });
+    });
+    
 }
 
 exports.todos = obtenerTodos;
 exports.obtenterPorId = obtenterPorId;
 exports.eliminarPorid = eliminarPorid;
-exports.actualizarPorId = actualizarPorId;
+exports.actualizar = actualizar;
 exports.crearUsario = crearUsario;
