@@ -54,8 +54,14 @@ router.post('/crear', async function (req, res) {
     }
   );
 });
-
-
+router.post('/login', async function (req, res) {
+  var login = req.body.usuario; //se obtine los datos del usuario del body de la peticion y se almacena en la variable login
+  await usuarioService.loginusuario(login).then(
+    resp => {
+      res.send(resp);
+    }
+  );
+});
 
 
 router.delete('/eliminar/:id', async function (req, res) {

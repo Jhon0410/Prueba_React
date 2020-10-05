@@ -29,12 +29,18 @@ const actualizarUsuario = function(usuario){
   WHERE USU_ID = `+usuario.id;
 }
 
+const login = function(correo){
+  return `SELECT * FROM USUARIO WHERE USU_CORREO = '`+ correo + `'`;
+}
+
+
 
 module.exports.crearUsuario = crearUsuario;
 module.exports.todos = todos;
 module.exports.obtenterPorId = obtenterPorId;
 module.exports.eliminarPorId = eliminarPorId;
 module.exports.actualizarUsuario = actualizarUsuario;
+module.exports.login = login;
 
 
 
