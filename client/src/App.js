@@ -1,24 +1,31 @@
 import React from 'react';
-import logo from './logo.svg';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import Navigation from './components/navigation';
+import homeComponent from './components/homeComponent/home.component';
+import usuarioComponent from './components/usuarioComponent/lista.component';
+import usuarioEditComponent from './components/usuarioComponent/crear.component';
+import categoriaComponent from './components/categoriaComponent/lista.component';
+import categoriaEditComponent from './components/categoriaComponent/crear.component';
+import productoComponent from './components/productoComponent/lista.component';
+import productoEditComponent from './components/productoComponent/crear.component';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Router>
+        <Navigation />
+        <div className="container p-4">
+        <Route path="/" exact component={homeComponent} />
+        <Route path="/usuario" exact  component={usuarioComponent} />
+        <Route path="/usuario/editar/:id" exact component={usuarioEditComponent} />
+        <Route path="/categoria"  exact  component={categoriaComponent} />
+       <Route path="/categoria/editar/:id"  exact  component={categoriaEditComponent} />
+       <Route path="/producto" exact  component={productoComponent} />
+       <Route path="/producto/editar/:id" exact  component={productoEditComponent} />
+  </div>
+      </Router>
     </div>
   );
 }

@@ -3,7 +3,7 @@ const productoModel = function (producto) {
         id: producto.PRO_ID,
         nombre: producto.PRO_NOMBRE,
         precio: producto.PRO_PRECIO,
-        nombre: producto.PRO_STOCK,
+        stock: producto.PRO_STOCK,
         categoriaid: producto.PRO_CAT_ID
         
         
