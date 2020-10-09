@@ -27,16 +27,62 @@ let crearUsario = function (usuario) {
     return new Promise(function (resolve, reject) {
         const queries = require('../database/queries.usuario.database');
         const conexion = require('../database/conection.database');
-        var sql_insert = queries.crearUsuario(usuario);
-        conexion.db.run(sql_insert, err => {
+        
+        var sql_usuario = queries.login(usuario.correo);
+        conexion.db.get(sql_usuario, (err, row) => {
+            if (err) {
+                console.log(err.message);
+                resolve({ success: false, msg: "Hubo un error al ejecutar la crecion del usuario, por favor consulte al administrador" });
+            } else {
+                if (row) {
+                    //el usuario existe 
+                    resolve({ success: false, msg: "El usario ya existe" });
+                } else {
+                    var sql_insert = queries.crearUsuario(usuario);
+                    conexion.db.run(sql_insert, err => {
+                        if (err) {
+                            console.log(err.message);
+                            resolve({ success: false, msg: "Ocurrio un error al crear el usuario" });
+                        } else {
+                            console.log('creado con exito');
+                            resolve({ success: true, msg: "El usario fue creado exitosamente" });
+                        }
+                    });
+                }
+
+            }
+        });
+
+    });
+};
+
+let crearUsarioAdmin = function () {
+    return new Promise(function (resolve, reject) {
+        const queries = require('../database/queries.usuario.database');
+        const conexion = require('../database/conection.database');
+        
+        var sql_usuario = queries.obtenterPorId(0);
+        conexion.db.get(sql_usuario, (err, row) => {
             if (err) {
                 console.log(err.message);
                 resolve(false);
             } else {
-                console.log('creado con exito');
-                resolve(true);
+                if (row) {
+                    resolve(true);
+                } else {
+                    var sql_insert = queries.crearUsuarioAdmin();
+                    conexion.db.run(sql_insert, err => {
+                        if (err) {
+                            resolve(false);
+                        } else {
+                            resolve(true);
+                        }
+                    });
+                }
+
             }
         });
+
     });
 };
 
@@ -67,7 +113,7 @@ let loginusuario = function (login) {
         const queries = require('../database/queries.usuario.database');
         const conexion = require('../database/conection.database');
         const model = require('../model/usuario.model');
-        var sql_usuario = queries.login(login.correo);//obtiene la consulta a ejecutar en la BD
+        var sql_usuario = queries.login(login.correo);
         conexion.db.get(sql_usuario, (err, row) => {
             if (err) {
                 console.log(err.message);
@@ -131,4 +177,4 @@ exports.eliminarPorid = eliminarPorid;
 exports.actualizar = actualizar;
 exports.crearUsario = crearUsario;
 exports.loginusuario = loginusuario;
-
+exports.crearUsarioAdmin = crearUsarioAdmin;

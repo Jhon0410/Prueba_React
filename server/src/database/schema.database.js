@@ -3,11 +3,13 @@ const sql_create_usuario = `CREATE TABLE IF NOT EXISTS "USUARIO" (
 	"USU_NOMBRE"	TEXT NOT NULL,
 	"USU_CORREO"	TEXT NOT NULL,
 	"USU_TELEFONO"	TEXT NOT NULL,
-	"USU_PASSWORD"	TEXT NOT NULL
+	"USU_PASSWORD"	TEXT NOT NULL,
+	"USU_ROL" TEXT NOT NULL
 );`;
 
 const sql_create_categoria = `CREATE TABLE IF NOT EXISTS "CATEGORIA" (
 	"CAT_ID"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	"CAT_CODIGO"	TEXT NOT NULL,
 	"CAT_NOMBRE"	TEXT NOT NULL,
 	"CAT_USU"	INTEGER NOT NULL,
   	FOREIGN KEY ("CAT_USU")
@@ -25,22 +27,23 @@ const sql_create_producto = `CREATE TABLE IF NOT EXISTS "PRODUCTO" (
 );`;
 
 let creardb = function () {
+	const usuarioService = require('../servicio/usuario.service');
 	const conection = require('./conection.database');
 	conection.db.run(sql_create_usuario, err => {
 		if (err) {
 			return console.error(err.message);
 		}
-		console.log("tabla usuario creada");
+		
 		conection.db.run(sql_create_categoria, err => {
 			if (err) {
 				return console.error(err.message);
 			}
-			console.log("tabla usuario creada");
+			
 			conection.db.run(sql_create_producto, err => {
 				if (err) {
 					return console.error(err.message);
 				}
-				console.log("tabla usuario creada");
+				usuarioService.crearUsarioAdmin();
 			});
 		});
 	});

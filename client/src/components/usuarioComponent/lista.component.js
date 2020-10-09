@@ -30,21 +30,20 @@ export default class UsuarioComponent extends Component {
 
     editarUsuario = (id) => {
         console.log('aca' + id);
-       let path = "usuario/editar/" + id;
-     //  this.context.router.history.push("usuario/editar/" + id);
-       return <Redirect to={path} push={true}/>
+        let path = "usuario/editar/" + id;
+        this.props.history.push(path);
     }
 
     eliminarUsuario = (id) => {
         console.log('usuario a eliminar' + id);
         let confirm = window.confirm("¿Esta seguro de eliminar el registro");
-        if(confirm){
+        if (confirm) {
             let url = path.api + 'usuario/eliminar/' + id;
             axios.delete(url).then(
                 res => {
                     const success = res.data.success;
                     const msg = res.data.msg;
-                    if(success){
+                    if (success) {
                         this.cargarDatos();
                         alert(msg)
                     }
@@ -55,7 +54,7 @@ export default class UsuarioComponent extends Component {
                 }
             );
         }
-        
+
     }
 
 
@@ -69,7 +68,7 @@ export default class UsuarioComponent extends Component {
                                 <th scope="col">Nombre de usuario</th>
                                 <th scope="col">Correo electonico</th>
                                 <th scope="col">teléfono</th>
-                                <th scope="col" style={{textAlign: "center"}} colSpan="2">Opciones</th>
+                                <th scope="col" style={{ textAlign: "center" }} colSpan="2">Opciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -81,15 +80,19 @@ export default class UsuarioComponent extends Component {
                                         <td>{usuario.correo}</td>
                                         <td>{usuario.telefono}</td>
                                         <td>
-                                         
-                                        <button type="button" className="btn btn-primary" onClick={()=>{this.editarUsuario(usuario.id)}}>
+
+                                            <button type="button" className="btn btn-primary" onClick={() => { this.editarUsuario(usuario.id) }}>
                                                 Editar
                                              </button>
                                         </td>
                                         <td>
-                                            <button type="button" className="btn btn-danger" onClick={()=>{this.eliminarUsuario(usuario.id)}}>
-                                                eliminar
-                                             </button>
+                                            {usuario.totalCategorias === 0
+                                                ? <button type="button" className="btn btn-danger" onClick={() => { this.eliminarUsuario(usuario.id) }}>
+                                                    eliminar
+                                         </button>
+                                                : ''
+                                            }
+
                                         </td>
                                     </tr>
                                 ))

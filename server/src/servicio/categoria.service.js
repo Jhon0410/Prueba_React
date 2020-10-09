@@ -1,9 +1,9 @@
-let obtenerTodos = function () {
+let obtenerTodos = function (idUsuario) {
     return new Promise(function (resolve, reject) {
         const queries = require('../database/queries.categoria.database');
         const conexion = require('../database/conection.database');
         const model = require('../model/categoria.model');
-        var sql_todos = queries.todos();
+        var sql_todos = queries.todos(idUsuario);
         conexion.db.all(sql_todos, [], (err, rows) => {
             if (err) {
                 console.log(err.message);
@@ -83,6 +83,7 @@ let actualizar = function (categoria) {
         const queries = require('../database/queries.categoria.database');
         const conexion = require('../database/conection.database');
         var sql_actualizar = queries.actualizarCategoria(categoria);
+        console.log(sql_actualizar);
         conexion.db.run(sql_actualizar, err => {
             if (err) {
                 console.log(err.message);

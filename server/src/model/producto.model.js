@@ -4,8 +4,8 @@ const productoModel = function (producto) {
         nombre: producto.PRO_NOMBRE,
         precio: producto.PRO_PRECIO,
         stock: producto.PRO_STOCK,
-        categoriaid: producto.PRO_CAT_ID
-        
+        categoriaid: producto.PRO_CAT_ID,
+        categoria: producto.CATE
         
     };
     return productoModel;

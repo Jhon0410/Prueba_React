@@ -1,15 +1,29 @@
 const crearUsuario = function(usuario){
-    return `INSERT INTO USUARIO (USU_NOMBRE,USU_CORREO,USU_TELEFONO,USU_PASSWORD)
+    return `INSERT INTO USUARIO (USU_NOMBRE,USU_CORREO,USU_TELEFONO,USU_PASSWORD, USU_ROL)
      VALUES (
         '`+usuario.nombre+`',
         '`+usuario.correo+`',
         '`+usuario.telefono+`',
-        '`+usuario.password+`'
+        '`+usuario.password+`',
+        'USUARIO'
       ); `;
 }
 
+const crearUsuarioAdmin = function(){
+  return `INSERT INTO USUARIO (USU_ID,USU_NOMBRE,USU_CORREO,USU_TELEFONO,USU_PASSWORD, USU_ROL)
+   VALUES (0,
+    'Administrador',
+    'admin@test.com',
+    '1000000000',
+    '12345678',
+    'ADMIN'
+    ); `;
+}
+
 const todos = function(){
-  return `SELECT * FROM USUARIO `;
+  return `SELECT USU.*, COUNT(CAT.CAT_ID) AS CATEGORIAS FROM USUARIO USU
+  LEFT OUTER JOIN CATEGORIA CAT ON USU.USU_ID = CAT.CAT_USU
+  WHERE USU_ROL <> 'ADMIN' GROUP BY USU.USU_ID `;
 }
 
 const obtenterPorId = function(id){
@@ -17,14 +31,12 @@ const obtenterPorId = function(id){
 }
 
 const eliminarPorId = function(id){
-  return `DELETE FROM USUARIO WHERe USU_ID = `+id;
+  return `DELETE FROM USUARIO WHERE USU_ID = `+id;
 }
 
 const actualizarUsuario = function(usuario){
-  return `UPDATE USUARIO SET
+  return `UPDATE USUARIO SET 
   USU_NOMBRE = '`+usuario.nombre+`',
-  USU_CORREO =  '`+usuario.correo+`',
-  USU_PASSWORD = '`+usuario.password+`',
   USU_TELEFONO = '`+usuario.telefono+`'
   WHERE USU_ID = `+usuario.id;
 }
@@ -36,6 +48,7 @@ const login = function(correo){
 
 
 module.exports.crearUsuario = crearUsuario;
+module.exports.crearUsuarioAdmin = crearUsuarioAdmin;
 module.exports.todos = todos;
 module.exports.obtenterPorId = obtenterPorId;
 module.exports.eliminarPorId = eliminarPorId;

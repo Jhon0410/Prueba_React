@@ -1,13 +1,16 @@
 const crearCategoria = function(categoria){
-    return `INSERT INTO CATEGORIA (CAT_NOMBRE, CAT_USU)
+    return `INSERT INTO CATEGORIA (CAT_CODIGO, CAT_NOMBRE, CAT_USU)
      VALUES (
+        '`+categoria.codigo+`',
         '`+categoria.nombre+`',
         `+categoria.usuario+`             
       ); `;
 }
 
-const todos = function(){
-  return `SELECT * FROM CATEGORIA `;
+const todos = function(idUsuario){
+  return `SELECT CAT.*,   COUNT(PRO.PRO_ID) AS PRODUCTOS  from CATEGORIA CAT
+  LEFT OUTER JOIN PRODUCTO PRO ON CAT.CAT_ID = PRO.PRO_CAT_ID
+  where CAT_USU = `+idUsuario+` GROUP BY CAT_ID `;
 }
 
 const obtenterPorId = function(id){
@@ -20,8 +23,8 @@ const eliminarPorId = function(id){
 
 const actualizarCategoria = function(categoria){
   return `UPDATE CATEGORIA SET
-  CAT_NOMBRE = '`+categoria.nombre+`',
-  CAT_USU = `+categoria.usuario+`
+  CAT_CODIGO = '`+categoria.codigo+`',
+  CAT_NOMBRE = '`+categoria.nombre+`'
   WHERE CAT_ID = `+categoria.id;
 }
 

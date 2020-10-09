@@ -8,8 +8,9 @@ router.use(function timeLog(req, res, next) {
   next();
 });
 
-router.get('/todos', async function (req, res) {
-  await categoriaService.todos().then(
+router.get('/todos/:id', async function (req, res) {
+  var id = req.params.id;
+  await categoriaService.todos(id).then(
     resp => {
       if (resp.success) {
         respuesta = resp.data;

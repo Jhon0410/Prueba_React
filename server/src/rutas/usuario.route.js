@@ -38,19 +38,8 @@ router.get('/porid/:id', async function (req, res) {
 router.post('/crear', async function (req, res) {
   var usuario = req.body.usuario;
   await usuarioService.crearUsario(usuario).then(
-    exito => {
-      if (exito) {
-        respuesta = {
-          msg: 'El usuario fue creado con exito',
-          success: true
-        }
-      } else {
-        respuesta = {
-          msg: 'ocurrio un error al crear el usuario',
-          success: false
-        }
-      }
-      res.send(respuesta);
+    resp => {
+      res.send(resp);
     }
   );
 });

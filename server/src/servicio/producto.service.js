@@ -1,9 +1,9 @@
-let obtenerTodos = function () {
+let obtenerTodos = function (id) {
     return new Promise(function (resolve, reject) {
         const queries = require('../database/queries.productos.database');
         const conexion = require('../database/conection.database');
         const model = require('../model/producto.model');
-        var sql_todos = queries.todos();
+        var sql_todos = queries.todos(id);
         conexion.db.all(sql_todos, [], (err, rows) => {
             if (err) {
                 console.log(err.message);
